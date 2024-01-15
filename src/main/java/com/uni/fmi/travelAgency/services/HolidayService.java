@@ -66,6 +66,38 @@ public class HolidayService {
         }
     }
 
+    public List<ResponseHolidayDTO> filterByParams(Long location, LocalDate startDate, Integer duration){
+        List<Holiday> holidays = new ArrayList<>(); // holidayRepository.findAll();
+        if(location != null && startDate != null && duration != null){
+            holidays = holidayRepository.findByLocationAndDurationAndStartDate(location, duration.intValue(), startDate);
+        }else if(location != null && startDate != null){
+            holidays = holidayRepository.findByLocationAndStartDate(location, startDate);
+        }else if(location != null && duration != null){
+            holidays = holidayRepository.findByLocationAndDuration(location, duration.intValue());
+        }else if(startDate != null && duration != null){
+            holidays = holidayRepository.findByDurationAndStartDate(duration.intValue(), startDate);
+        }else if(location != null){
+            holidays = holidayRepository.findByLocation(locationService.findByIdLoc(location));
+        }else if(duration != null){
+            holidays = holidayRepository.findByDuration(duration);
+        } else if (startDate != null) {
+            holidays = holidayRepository.findByStartDate(startDate);
+        }else{
+            holidays = holidayRepository.findAll();
+        }
+
+        List<ResponseHolidayDTO> responseHolidayDTOS = new ArrayList<>();
+        if(holidays.size() == 0){
+            throw new NotFoundException("NO holiday found!");
+        }else{
+            for(Holiday holiday: holidays){
+                holiday = findByIdHol(holiday.getId());
+                responseHolidayDTOS.add(holiday.toResponseDto());
+            }
+            return responseHolidayDTOS;
+        }
+    }
+
     public boolean delete(Holiday holiday){
         Optional<Holiday> holidayToDelete = holidayRepository.findById(holiday.getId());
         if(holidayToDelete.isPresent()){

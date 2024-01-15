@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,8 +39,9 @@ public class HolidayController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseHolidayDTO>> getAllHolidays(){
-        return ResponseEntity.ok(holidayService.findAll());
+    public ResponseEntity<List<ResponseHolidayDTO>> getAllHolidays(@RequestParam(required = false) Long location,@RequestParam(required = false) LocalDate startDate ,@RequestParam(required = false) Integer duration ){
+        List<ResponseHolidayDTO> responses = holidayService.filterByParams(location, startDate, duration);
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{holidayId}")

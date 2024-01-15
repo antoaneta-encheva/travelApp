@@ -9,7 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "holidays")
 @Table(name = "holidays")
 public class Holiday implements Serializable {
     @Id

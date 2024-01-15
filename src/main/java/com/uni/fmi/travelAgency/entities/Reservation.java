@@ -5,7 +5,7 @@ import com.uni.fmi.travelAgency.dtos.reservationDtos.ResponseReservationDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-@Entity
+@Entity(name = "reservations")
 @Table(name = "reservations")
 public class Reservation {
     @Id
